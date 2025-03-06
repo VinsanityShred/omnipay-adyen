@@ -263,4 +263,14 @@ trait GatewayParameters
     {
         return $this->getParameter('origin');
     }
+
+    public function setCaptureDelayHours($captureDelayHours)
+    {
+        $this->setParameter('captureDelayHours', $captureDelayHours);
+    }
+
+    public function getCaptureDelayHours()
+    {
+        return $this->getParameter('captureDelayHours');
+    }
 }
