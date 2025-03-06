@@ -68,7 +68,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             'amount' => $amount,
             'reference' => $this->getTransactionId(),
             'merchantAccount' => $this->getMerchantAccount(),
-            'shopperInteraction' => 'Ecommerce'
+            'shopperInteraction' => 'Ecommerce',
+            'captureDelayHours' => (int) $this->getCaptureDelayHours(),
         ];
 
         if (!empty($this->getShopperReference())) {
