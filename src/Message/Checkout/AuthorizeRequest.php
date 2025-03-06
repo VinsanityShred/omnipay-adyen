@@ -66,9 +66,10 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         $data = [
             'additionalData' => $additionalData,
             'amount' => $amount,
-            'reference' => 'GISPENOUTLETNL-'.(string)$this->getTransactionId(),
+            'reference' => $this->getTransactionId(),
             'merchantAccount' => $this->getMerchantAccount(),
-            'shopperInteraction' => 'Ecommerce'
+            'shopperInteraction' => 'Ecommerce',
+            'captureDelayHours' => (int) $this->getCaptureDelayHours(),
         ];
 
         if (!empty($this->getShopperReference())) {
