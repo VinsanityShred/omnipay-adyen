@@ -44,6 +44,12 @@ class CreateCardRequest extends AbstractCheckoutRequest
             "shopperReference" => $this->getShopperReference(),
         ];
 
+        if ($this->getRequestedTestAcquirerResponseCode()) {
+            $data['additionalData'] = [
+                'requestedTestAcquirerResponseCode' => $this->getRequestedTestAcquirerResponseCode(),
+            ];
+        }
+
         return $data;
     }
 
@@ -55,5 +61,15 @@ class CreateCardRequest extends AbstractCheckoutRequest
     public function setPaymentMethod($paymentMethod)
     {
         $this->setParameter('paymentMethod', $paymentMethod);
+    }
+
+    public function setRequestedTestAcquirerResponseCode($requestedTestAcquirerResponseCode)
+    {
+        $this->setParameter('requestedTestAcquirerResponseCode', $requestedTestAcquirerResponseCode);
+    }
+
+    public function getRequestedTestAcquirerResponseCode()
+    {
+        return $this->getParameter('requestedTestAcquirerResponseCode');
     }
 }

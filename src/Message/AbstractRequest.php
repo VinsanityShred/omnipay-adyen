@@ -18,9 +18,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const INSTANCE_TEST = 'test';
 
     const VERSION_DIRECTORY         = 'v2';
-    const VERSION_CHECKOUT          = 'v69';
+    const VERSION_CHECKOUT          = 'v67';
     const VERSION_CHECKOUT_UTILITY  = 'v1';
-    const VERSION_PAYMENT_PAYMENT   = 'v69';
+    const VERSION_PAYMENT_PAYMENT   = 'v67';
     const VERSION_PAYMENT_RECURRING = 'v25';
     const VERSION_PAYMENT_PAYOUT    = 'v30';
 
