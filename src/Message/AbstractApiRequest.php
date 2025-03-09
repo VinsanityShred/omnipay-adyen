@@ -19,16 +19,25 @@ abstract class AbstractApiRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $auth = $this->getUsername() . ':' . $this->getPassword();
+        $auth = ($this->getUsername() && $this->getPassword()) ? $this->getUsername() . ':' . $this->getPassword() : null;
+        $apiKey = $this->getApiKey();
+
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+        // Basic auth header.
+        if ($auth) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($auth);
+        }
+        // API Key header.
+        if ($apiKey) {
+            $headers['X-API-Key']     = $apiKey;
+        }
 
         $response = $this->httpClient->request(
             'POST',
             $this->getEndpoint(),
-            [
-                'Content-Type' => 'application/json',
-                // Basic auth header.
-                'Authorization' => 'Basic ' . base64_encode($auth)
-            ],
+            $headers,
             json_encode($data)
         );
 
