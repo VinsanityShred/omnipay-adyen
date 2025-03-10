@@ -41,13 +41,11 @@ class CreateCardRequest extends AbstractCheckoutRequest
             'reference' => $this->getTransactionId(),
             'shopperInteraction' => 'Ecommerce',
             'recurringProcessingModel' => 'CardOnFile',
-            "shopperReference" => $this->getShopperReference(),
+            'shopperReference' => $this->getShopperReference(),
         ];
 
         if ($this->getRequestedTestAcquirerResponseCode()) {
-            $data['additionalData'] = [
-                'requestedTestAcquirerResponseCode' => $this->getRequestedTestAcquirerResponseCode(),
-            ];
+            $data['additionalData']['RequestedTestAcquirerResponseCode'] = $this->getRequestedTestAcquirerResponseCode();
         }
 
         return $data;
