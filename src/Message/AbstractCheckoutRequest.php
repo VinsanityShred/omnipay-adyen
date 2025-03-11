@@ -14,12 +14,13 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
      */
     public function sendData($data)
     {
+        [$endpoint, $data] = $this->buildEndpointCleanData($data);
         $response = $this->httpClient->request(
             'POST',
-            $this->getEndpoint(),
+            $endpoint,
             [
                 'Content-Type' => 'application/json',
-                // Basic auth header.
+                // API Key header.
                 'x-api-key' => $this->getApiKey(),
             ],
             json_encode($data)
@@ -30,5 +31,23 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
         return $this->createResponse($payload);
     }
 
+    private function buildEndpointCleanData(array $parameters)
+    {
+        $endpoint = $this->getEndpoint($parameters);
+
+        $keysToRemove = ['paymentPspReference', 'modificationAction'];
+
+        if ($parameters['modificationAction'] == 'reversals') {
+            $keysToRemove[] = 'amount';
+        }
+
+        $parameters = array_filter($parameters, function($key) use ($keysToRemove) {
+            return !in_array($key, $keysToRemove);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return [$endpoint, $parameters];
+    }
+
     abstract public function createResponse($payload);
+
 }
