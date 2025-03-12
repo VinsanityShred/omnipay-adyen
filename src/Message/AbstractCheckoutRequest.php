@@ -37,7 +37,7 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
 
         $keysToRemove = ['paymentPspReference', 'modificationAction'];
 
-        if ($parameters['modificationAction'] == 'reversals') {
+        if (isset($parameters['modificationAction']) && $parameters['modificationAction'] === 'reversals') {
             $keysToRemove[] = 'amount';
         }
 
