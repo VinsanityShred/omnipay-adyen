@@ -30,5 +30,10 @@ class CreateModificationResponse extends AbstractResponse
         return $this->payload;
     }
 
+    public function getTransactionReference()
+    {
+        return $this->getDataItem('paymentPspReference');
+    }
+
 
 }
