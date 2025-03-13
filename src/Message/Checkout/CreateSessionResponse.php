@@ -11,7 +11,9 @@ class CreateSessionResponse extends AbstractResponse
 
     public function isSuccessful()
     {
-        return count($this->getData()) > 0;
+        return !$this->getMessage()
+            && $this->getSessionId() !== null
+            && $this->getSessionData() !== null;
     }
 
     public function getSessionId()
@@ -36,6 +38,13 @@ class CreateSessionResponse extends AbstractResponse
             'sessionData' => $this->getSessionData(),
             'expiresAt' => $this->getExpiresAt(),
         ];
+    }
+
+    public function getMessage()
+    {
+        return isset($this->getData()['message'])
+            ? $this->getData()['message']
+            : null;
     }
 
 }
