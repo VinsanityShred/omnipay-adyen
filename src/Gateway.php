@@ -14,7 +14,7 @@ use Omnipay\Adyen\Message\Checkout\CreateSessionRequest;
 use Omnipay\Adyen\Message\Checkout\PaymentMethodRequest;
 use Omnipay\Common\PaymentMethod;
 
-class CheckoutGateway extends ApiGateway
+class Gateway extends ApiGateway
 {
     public function getName()
     {

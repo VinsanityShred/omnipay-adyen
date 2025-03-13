@@ -41,8 +41,12 @@ class CreateCardRequest extends AbstractCheckoutRequest
             'reference' => $this->getTransactionId(),
             'shopperInteraction' => 'Ecommerce',
             'recurringProcessingModel' => 'CardOnFile',
-            "shopperReference" => $this->getShopperReference(),
+            'shopperReference' => $this->getShopperReference(),
         ];
+
+        if (!empty($this->getRequestedTestAcquirerResponseCode())) {
+            $data['additionalData']['RequestedTestAcquirerResponseCode'] = $this->getRequestedTestAcquirerResponseCode();
+        }
 
         return $data;
     }
@@ -55,5 +59,15 @@ class CreateCardRequest extends AbstractCheckoutRequest
     public function setPaymentMethod($paymentMethod)
     {
         $this->setParameter('paymentMethod', $paymentMethod);
+    }
+
+    public function setRequestedTestAcquirerResponseCode($requestedTestAcquirerResponseCode)
+    {
+        $this->setParameter('requestedTestAcquirerResponseCode', $requestedTestAcquirerResponseCode);
+    }
+
+    public function getRequestedTestAcquirerResponseCode()
+    {
+        return $this->getParameter('requestedTestAcquirerResponseCode');
     }
 }
