@@ -18,9 +18,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const INSTANCE_TEST = 'test';
 
     const VERSION_DIRECTORY         = 'v2';
-    const VERSION_CHECKOUT          = 'v67';
+    const VERSION_CHECKOUT          = 'v69';
     const VERSION_CHECKOUT_UTILITY  = 'v1';
-    const VERSION_PAYMENT_PAYMENT   = 'v67';
+    const VERSION_PAYMENT_PAYMENT   = 'v69';
     const VERSION_PAYMENT_RECURRING = 'v25';
     const VERSION_PAYMENT_PAYOUT    = 'v30';
 
@@ -39,6 +39,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const SERVICE_GROUP_PAYMENT_PAYMENTMETHODS      = 'paymentMethods';
     const SERVICE_GROUP_PAYMENT_PAYMENTS            = 'payments';
     const SERVICE_GROUP_PAYMENT_PAYMENTS_DETAILS    = 'payments/details';
+    const SERVICE_GROUP_PAYMENT_SESSIONS            = 'sessions';
+    const SERVICE_GROUP_PAYMENT_MODIFICATIONS       = 'payments/{paymentPspReference}/{modificationAction}';
+
 
     const SERVICE_GROUP_RECURRING_LISTRECURRINGDETAILS      = 'listRecurringDetails';
     const SERVICE_GROUP_RECURRING_DISABLE                   = 'disable';
