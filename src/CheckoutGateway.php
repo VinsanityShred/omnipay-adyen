@@ -77,4 +77,9 @@ class CheckoutGateway extends ApiGateway
         return $this->createRequest(CreateModificationRequest::class, $parameters);
     }
 
+    public function void(array $parameters = array())
+    {
+        return $this->createRequest(CreateModificationRequest::class, $parameters);
+    }
+
 }
