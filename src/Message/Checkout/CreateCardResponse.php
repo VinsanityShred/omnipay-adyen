@@ -29,4 +29,9 @@ class CreateCardResponse extends AbstractResponse
     {
         return $this->getDataItem('refusalReason');
     }
+
+    public function getCode()
+    {
+        return $this->data['resultCode'] ?? null;
+    }
 }

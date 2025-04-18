@@ -35,5 +35,9 @@ class CreateModificationResponse extends AbstractResponse
         return $this->getDataItem('paymentPspReference');
     }
 
+    public function getCode()
+    {
+        return $this->data['status'] ?? null;
+    }
 
 }
