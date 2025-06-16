@@ -797,9 +797,9 @@ The plugin supports configuration of the live environment URLs through environme
 - `liveInstance`: Custom instance name for the live environment URL (e.g., 'custom')
 
 Example URL formats:
-- Test environment: `https://checkout-test.adyen.com/v67/payments`
-- Live environment (default): `https://checkout-live.adyenpayments.com/checkout/v67/payments`
-- Live environment (custom): `https://xxx-xxx-checkout-custom.adyenpayments.com/checkout/v67/payments`
+- Test environment: `https://checkout-test.adyen.com/v69/payments`
+- Live environment (default): `https://checkout-live.adyenpayments.com/checkout/v69/payments`
+- Live environment (custom): `https://xxx-xxx-checkout-custom.adyenpayments.com/checkout/v69/payments`
 
 ### Example Configuration
 

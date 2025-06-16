@@ -19,7 +19,6 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
 
     // Default values for live environment configuration
     const DEFAULT_PREFIX_LIVE = '';
-    const DEFAULT_INSTANCE_LIVE = 'live';
 
     const VERSION_DIRECTORY         = 'v2';
     const VERSION_CHECKOUT          = 'v69';
@@ -105,7 +104,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
      */
     protected function getLiveInstanceValue()
     {
-        return $this->getLiveInstance() ?: static::DEFAULT_INSTANCE_LIVE;
+        return $this->getLiveInstance() ?: static::INSTANCE_LIVE;
     }
 
     /**
