@@ -23,13 +23,15 @@ abstract class AbstractGateway extends CommonAbstractGateway
             'skinCode' => null,
             'secret' => '',
             'apiKey' => '',
-            'currency' => 'EUR',
+            'currency' => 'USD',
             'publicKeyToken' => '',             // publicKeyToken aka Library Token.
             'username' => '',
             'password' => '',
             'testMode' => true,
-            'shopperLocale' => 'nl_NL',
-            'countryCode' => 'nl'
+            'shopperLocale' => 'en_US',
+            'countryCode' => 'us',
+            'livePrefix' => '',
+            'liveInstance' => 'live-us',
         ];
     }
 }

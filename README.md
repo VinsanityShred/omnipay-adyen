@@ -40,6 +40,9 @@ Table of Contents
          * [Notification Server Request (from gateway)](#notification-server-request-from-gateway)
          * [Notification Response (to gateway)](#notification-response-to-gateway)
       * [Support](#support)
+      * [Environment Configuration](#environment-configuration)
+         * [Live Environment URL Configuration](#live-environment-url-configuration)
+         * [Example Configuration](#example-configuration)
 
 ## Installation
 
@@ -783,3 +786,32 @@ so it can be easily found.
 If you believe you have found a bug, please report it using the
 [GitHub issue tracker](https://github.com/academe/omnipay-adyen/issues),
 or better yet, fork the library and submit a pull request.
+
+## Environment Configuration
+
+The plugin supports configuration of the live environment URLs through environment variables:
+
+### Live Environment URL Configuration
+
+- `livePrefix`: Custom prefix for the live environment URL (e.g., 'xxx-xxx')
+- `liveInstance`: Custom instance name for the live environment URL (e.g., 'custom')
+
+Example URL formats:
+- Test environment: `https://checkout-test.adyen.com/v69/payments`
+- Live environment (default): `https://checkout-live.adyenpayments.com/checkout/v69/payments`
+- Live environment (custom): `https://xxx-xxx-checkout-custom.adyenpayments.com/checkout/v69/payments`
+
+### Example Configuration
+
+```php
+$gateway = Omnipay::create('Adyen');
+$gateway->initialize([
+    'merchantAccount' => 'YourMerchantAccount',
+    'merchantAccountId' => 'YourMerchantAccountId',
+    'apiKey' => 'YourApiKey',
+    'testMode' => false,
+    'currency' => 'USD',
+    'livePrefix' => 'xxx-xxx',
+    'liveInstance' => 'custom'
+]);
+```

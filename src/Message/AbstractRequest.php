@@ -17,10 +17,13 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const INSTANCE_LIVE = 'live';
     const INSTANCE_TEST = 'test';
 
+    // Default values for live environment configuration
+    const DEFAULT_PREFIX_LIVE = '';
+
     const VERSION_DIRECTORY         = 'v2';
-    const VERSION_CHECKOUT          = 'v67';
+    const VERSION_CHECKOUT          = 'v69';
     const VERSION_CHECKOUT_UTILITY  = 'v1';
-    const VERSION_PAYMENT_PAYMENT   = 'v67';
+    const VERSION_PAYMENT_PAYMENT   = 'v69';
     const VERSION_PAYMENT_RECURRING = 'v25';
     const VERSION_PAYMENT_PAYOUT    = 'v30';
 
@@ -39,6 +42,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const SERVICE_GROUP_PAYMENT_PAYMENTMETHODS      = 'paymentMethods';
     const SERVICE_GROUP_PAYMENT_PAYMENTS            = 'payments';
     const SERVICE_GROUP_PAYMENT_PAYMENTS_DETAILS    = 'payments/details';
+    const SERVICE_GROUP_PAYMENT_SESSIONS            = 'sessions';
+    const SERVICE_GROUP_PAYMENT_MODIFICATIONS       = 'payments/{paymentPspReference}/{modificationAction}';
+
 
     const SERVICE_GROUP_RECURRING_LISTRECURRINGDETAILS      = 'listRecurringDetails';
     const SERVICE_GROUP_RECURRING_DISABLE                   = 'disable';
@@ -72,14 +78,34 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     // Checkout services
     // {version} = VERSION_CHECKOUT
     protected $urlTemplateCheckoutServices = 'https://checkout-{instance}.adyen.com/{version}/{service}';
-    //protected $urlTemplateCheckoutServices = 'https://xxx-xxx-checkout-{instance}.adyenpayments.com/checkout/{version}/{service}';
+    protected $urlTemplateCheckoutServicesLive = 'https://{prefix}checkout-{instance}.adyenpayments.com/checkout/{version}/{service}';
 
     // Checkout Utility
     // {version} = VERSION_CHECKOUT_UTILITY
     protected $urlTemplateCheckoutUtility = 'https://checkout-{instance}.adyen.com/{version}';
-    //protected $urlTemplateCheckoutUtility = 'https:/xxx-xxx-checkout-{instance}.adyenpayments.com/checkout/{version}';
+    protected $urlTemplateCheckoutUtilityLive = 'https://{prefix}checkout-{instance}.adyenpayments.com/checkout/{version}';
 
     protected $returnContentType = 'application/json';
+
+    /**
+     * Get the live environment prefix from options or default
+     *
+     * @return string
+     */
+    protected function getLivePrefixValue()
+    {
+        return $this->getLivePrefix() ?: static::DEFAULT_PREFIX_LIVE;
+    }
+
+    /**
+     * Get the live environment instance from options or default
+     *
+     * @return string
+     */
+    protected function getLiveInstanceValue()
+    {
+        return $this->getLiveInstance() ?: static::INSTANCE_LIVE;
+    }
 
     /**
      * Expand a URL template.
@@ -99,11 +125,39 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
 
     public function getCheckoutUrl($service, $version = self::VERSION_CHECKOUT)
     {
-        return $this->expandUrlTemplate($this->urlTemplateCheckoutServices, [
-            'instance' => ($this->getTestMode() ? static::INSTANCE_TEST : static::INSTANCE_LIVE),
+        $isLive = !$this->getTestMode();
+        $template = $isLive ? $this->urlTemplateCheckoutServicesLive : $this->urlTemplateCheckoutServices;
+        
+        $parameters = [
+            'instance' => $isLive ? $this->getLiveInstanceValue() : static::INSTANCE_TEST,
             'service' => $service,
             'version' => $version,
-        ]);
+        ];
+
+        if ($isLive) {
+            $prefix = $this->getLivePrefixValue();
+            $parameters['prefix'] = $prefix ? $prefix . '-' : '';
+        }
+
+        return $this->expandUrlTemplate($template, $parameters);
+    }
+
+    public function getCheckoutUtilityUrl($version = self::VERSION_CHECKOUT_UTILITY)
+    {
+        $isLive = !$this->getTestMode();
+        $template = $isLive ? $this->urlTemplateCheckoutUtilityLive : $this->urlTemplateCheckoutUtility;
+        
+        $parameters = [
+            'instance' => $isLive ? $this->getLiveInstanceValue() : static::INSTANCE_TEST,
+            'version' => $version,
+        ];
+
+        if ($isLive) {
+            $prefix = $this->getLivePrefixValue();
+            $parameters['prefix'] = $prefix ? $prefix . '-' : '';
+        }
+
+        return $this->expandUrlTemplate($template, $parameters);
     }
 
     /**

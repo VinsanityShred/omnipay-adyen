@@ -11,11 +11,19 @@ class PaymentMethodResponse extends AbstractResponse
 
     public function isSuccessful()
     {
-        return count($this->getData()) > 0;
+        return !$this->getMessage()
+            && count($this->getData()) > 0;
     }
 
     public function getPaymentMethodsResponse()
     {
         return json_encode($this->data);
+    }
+
+    public function getMessage()
+    {
+        return isset($this->getData()['message'])
+            ? $this->getData()['message']
+            : null;
     }
 }

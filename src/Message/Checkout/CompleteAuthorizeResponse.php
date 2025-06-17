@@ -40,4 +40,9 @@ class CompleteAuthorizeResponse extends AbstractResponse
     {
         return $this->getDataItem('pspReference');
     }
+
+    public function getCode()
+    {
+        return $this->getResultCode();
+    }
 }

@@ -263,4 +263,56 @@ trait GatewayParameters
     {
         return $this->getParameter('origin');
     }
+
+    public function getMerchantAccountId()
+    {
+        return $this->getParameter('merchantAccountId');
+    }
+
+    public function setMerchantAccountId($value)
+    {
+        return $this->setParameter('merchantAccountId', $value);
+    }
+
+    /**
+     * Get the live environment prefix.
+     *
+     * @return string
+     */
+    public function getLivePrefix()
+    {
+        return $this->getParameter('livePrefix');
+    }
+
+    /**
+     * Set the live environment prefix.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setLivePrefix($value)
+    {
+        return $this->setParameter('livePrefix', $value);
+    }
+
+    /**
+     * Get the live environment instance.
+     *
+     * @return string
+     */
+    public function getLiveInstance()
+    {
+        return $this->getParameter('liveInstance');
+    }
+
+    /**
+     * Set the live environment instance.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setLiveInstance($value)
+    {
+        return $this->setParameter('liveInstance', $value);
+    }
 }
