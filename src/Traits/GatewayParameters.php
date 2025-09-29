@@ -234,6 +234,26 @@ trait GatewayParameters
         return $this->setParameter('channel', $value);
     }
 
+    public function setShopperName($shopperName)
+    {
+        $this->setParameter('shopperName', $shopperName);
+    }
+
+    public function getShopperName()
+    {
+        return $this->getParameter('shopperName');
+    }
+
+    public function setShopperEmail($shopperEmail)
+    {
+        $this->setParameter('shopperEmail', $shopperEmail);
+    }
+
+    public function getShopperEmail()
+    {
+        return $this->getParameter('shopperEmail');
+    }
+
     public function setShopperReference($shopperReference)
     {
         $this->setParameter('shopperReference', $shopperReference);
@@ -314,5 +334,35 @@ trait GatewayParameters
     public function setLiveInstance($value)
     {
         return $this->setParameter('liveInstance', $value);
+    }
+
+    public function setBillingAddress(?array $value)
+    {
+        return $this->setParameter('billingAddress', $value);
+    }
+
+    public function getBillingAddress()
+    {
+        return $this->getParameter('billingAddress');
+    }
+
+    public function setDeliveryAddress(?array $value)
+    {
+        return $this->setParameter('deliveryAddress', $value);
+    }
+
+    public function getDeliveryAddress()
+    {
+        return $this->getParameter('deliveryAddress');
+    }
+
+    public function setProcessingModel(string $value)
+    {
+        return $this->setParameter('processingModel', $value);
+    }
+
+    public function getProcessingModel()
+    {
+        return $this->getParameter('processingModel');
     }
 }

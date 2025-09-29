@@ -77,8 +77,20 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         if (!empty($this->getReturnUrl())) {
             $data['returnUrl'] = $this->getReturnUrl();
         }
+        if (!empty($this->getShopperName())) {
+            $data['shopperName'] = $this->getShopperName();
+        }
+        if (!empty($this->getShopperEmail())) {
+            $data['shopperEmail'] = $this->getShopperEmail();
+        }
         if (!empty($this->getClientIp())) {
             $data['shopperIP'] = $this->getClientIp();
+        }
+        if (!empty($this->getBillingAddress())) {
+            $data['billingAddress'] = $this->getBillingAddress();
+        }
+        if (!empty($this->getDeliveryAddress())) {
+            $data['deliveryAddress'] = $this->getDeliveryAddress();
         }
         if (!empty($this->getBrowserInfo())) {
             $data['browserInfo'] = $this->getBrowserInfo();
@@ -94,7 +106,7 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         $data = $this->addPaymentMethodData($data);
 
         if (isset($data['paymentMethod']['storedPaymentMethodId'])) {
-            $data['recurringProcessingModel'] = 'CardOnFile';
+            $data['recurringProcessingModel'] = $this->getProcessingModel() ?? 'CardOnFile';
             $data['shopperInteraction'] = 'ContAuth';
         }
 
