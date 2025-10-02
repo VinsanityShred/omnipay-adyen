@@ -71,33 +71,11 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             'shopperInteraction' => 'Ecommerce',
         ];
 
-        if (!empty($this->getShopperReference())) {
-            $data['shopperReference'] = $this->getShopperReference();
-        }
-        if (!empty($this->getReturnUrl())) {
-            $data['returnUrl'] = $this->getReturnUrl();
-        }
-        if (!empty($this->getShopperName())) {
-            $data['shopperName'] = $this->getShopperName();
-        }
-        if (!empty($this->getShopperEmail())) {
-            $data['shopperEmail'] = $this->getShopperEmail();
-        }
-        if (!empty($this->getClientIp())) {
-            $data['shopperIP'] = $this->getClientIp();
-        }
-        if (!empty($this->getBillingAddress())) {
-            $data['billingAddress'] = $this->getBillingAddress();
-        }
-        if (!empty($this->getDeliveryAddress())) {
-            $data['deliveryAddress'] = $this->getDeliveryAddress();
-        }
-        if (!empty($this->getBrowserInfo())) {
-            $data['browserInfo'] = $this->getBrowserInfo();
-        }
         if (!empty($this->getOrigin())) {
             $data['origin'] = $this->getOrigin();
         }
+
+        $data = $this->addCommonOptionalParameters($data);
 
         if (!empty($this->getCaptureDelayHours())) {
             $data['captureDelayHours'] = (int) $this->getCaptureDelayHours();
@@ -106,8 +84,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         $data = $this->addPaymentMethodData($data);
 
         if (isset($data['paymentMethod']['storedPaymentMethodId'])) {
-            $data['recurringProcessingModel'] = $this->getProcessingModel() ?? 'CardOnFile';
-            $data['shopperInteraction'] = 'ContAuth';
+            $data['recurringProcessingModel'] = $this->getRecurringProcessingModel() ?? 'CardOnFile';
+            $data['shopperInteraction'] = $this->getShopperInteraction() ?? 'ContAuth';
         }
 
         return $data;

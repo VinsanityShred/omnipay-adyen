@@ -356,13 +356,31 @@ trait GatewayParameters
         return $this->getParameter('deliveryAddress');
     }
 
-    public function setProcessingModel(string $value)
+    public function setShopperInteraction($shopperInteraction)
     {
-        return $this->setParameter('processingModel', $value);
+        $this->setParameter('shopperInteraction', $shopperInteraction);
+    }
+    public function getShopperInteraction()
+    {
+        return $this->getParameter('shopperInteraction');
     }
 
-    public function getProcessingModel()
+    public function setRecurringProcessingModel($recurringProcessingModel)
     {
-        return $this->getParameter('processingModel');
+        $this->setParameter('recurringProcessingModel', $recurringProcessingModel);
+    }
+    public function getRecurringProcessingModel()
+    {
+        return $this->getParameter('recurringProcessingModel');
+    }
+
+    public function setRiskData($riskData)
+    {
+        $this->setParameter('riskData', $riskData);
+    }
+
+    public function getRiskData()
+    {
+        return $this->getParameter('riskData');
     }
 }

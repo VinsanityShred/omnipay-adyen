@@ -48,6 +48,47 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
         return [$endpoint, $parameters];
     }
 
+    /**
+     * Add common optional parameters to the data array.
+     * This method consolidates the duplicate parameter setting logic
+     * used by both AuthorizeRequest and CreateCardRequest.
+     *
+     * @param array $data The data array to add parameters to
+     * @return array The data array with optional parameters added
+     */
+    protected function addCommonOptionalParameters(array $data): array
+    {
+        if (!empty($this->getShopperReference())) {
+            $data['shopperReference'] = $this->getShopperReference();
+        }
+        if (!empty($this->getReturnUrl())) {
+            $data['returnUrl'] = $this->getReturnUrl();
+        }
+        if (!empty($this->getShopperName())) {
+            $data['shopperName'] = $this->getShopperName();
+        }
+        if (!empty($this->getShopperEmail())) {
+            $data['shopperEmail'] = $this->getShopperEmail();
+        }
+        if (!empty($this->getClientIp())) {
+            $data['shopperIP'] = $this->getClientIp();
+        }
+        if (!empty($this->getBillingAddress())) {
+            $data['billingAddress'] = $this->getBillingAddress();
+        }
+        if (!empty($this->getDeliveryAddress())) {
+            $data['deliveryAddress'] = $this->getDeliveryAddress();
+        }
+        if (!empty($this->getBrowserInfo())) {
+            $data['browserInfo'] = $this->getBrowserInfo();
+        }
+        if (!empty($this->getRiskData()) && !empty($this->getRiskData()['clientData'])) {
+            $data['riskData']['clientData'] = $this->getRiskData()['clientData'];
+        }
+
+        return $data;
+    }
+
     abstract public function createResponse($payload);
 
 }
