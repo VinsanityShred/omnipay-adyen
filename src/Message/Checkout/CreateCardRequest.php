@@ -44,6 +44,7 @@ class CreateCardRequest extends AbstractCheckoutRequest
             'shopperReference' => $this->getShopperReference(),
         ];
 
+        $data = $this->addCommonOptionalParameters($data);
         if (!empty($this->getRequestedTestAcquirerResponseCode())) {
             $data['additionalData']['RequestedTestAcquirerResponseCode'] = $this->getRequestedTestAcquirerResponseCode();
         }

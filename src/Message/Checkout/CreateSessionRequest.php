@@ -68,22 +68,4 @@ class CreateSessionRequest extends AbstractCheckoutRequest
     {
         return $this->getParameter('storePaymentMethod');
     }
-
-    public function setShopperInteraction($shopperInteraction)
-    {
-        $this->setParameter('shopperInteraction', $shopperInteraction);
-    }
-    public function getShopperInteraction()
-    {
-        return $this->getParameter('shopperInteraction');
-    }
-
-    public function setRecurringProcessingModel($recurringProcessingModel)
-    {
-        $this->setParameter('recurringProcessingModel', $recurringProcessingModel);
-    }
-    public function getRecurringProcessingModel()
-    {
-        return $this->getParameter('recurringProcessingModel');
-    }
 }
