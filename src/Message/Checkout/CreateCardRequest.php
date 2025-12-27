@@ -39,8 +39,8 @@ class CreateCardRequest extends AbstractCheckoutRequest
             "storePaymentMethod" => true,
             'merchantAccount' => $this->getMerchantAccount(),
             'reference' => $this->getTransactionId(),
-            'shopperInteraction' => 'Ecommerce',
-            'recurringProcessingModel' => 'CardOnFile',
+            'shopperInteraction' => $this->getShopperInteraction() ?? 'Ecommerce',
+            'recurringProcessingModel' => $this->getRecurringProcessingModel() ?? 'CardOnFile',
             'shopperReference' => $this->getShopperReference(),
         ];
 
