@@ -39,11 +39,12 @@ class CreateCardRequest extends AbstractCheckoutRequest
             "storePaymentMethod" => true,
             'merchantAccount' => $this->getMerchantAccount(),
             'reference' => $this->getTransactionId(),
-            'shopperInteraction' => 'Ecommerce',
-            'recurringProcessingModel' => 'CardOnFile',
+            'shopperInteraction' => $this->getShopperInteraction() ?? 'Ecommerce',
+            'recurringProcessingModel' => $this->getRecurringProcessingModel() ?? 'CardOnFile',
             'shopperReference' => $this->getShopperReference(),
         ];
 
+        $data = $this->addCommonOptionalParameters($data);
         if (!empty($this->getRequestedTestAcquirerResponseCode())) {
             $data['additionalData']['RequestedTestAcquirerResponseCode'] = $this->getRequestedTestAcquirerResponseCode();
         }
