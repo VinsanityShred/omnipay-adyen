@@ -4,6 +4,7 @@ namespace Omnipay\Adyen;
 
 use Omnipay\Common\AbstractGateway as CommonAbstractGateway;
 use Omnipay\Adyen\Traits\GatewayParameters;
+use Omnipay\Adyen\Traits\PreservedParameters;
 use Omnipay\Adyen\Message\FetchPaymentMethodsRequest;
 use Omnipay\Adyen\Message\AuthorizeRequest;
 use Omnipay\Adyen\Message\CompleteAuthorizeRequest;
@@ -12,6 +13,7 @@ use Omnipay\Adyen\Message\CseClientRequest;
 abstract class AbstractGateway extends CommonAbstractGateway
 {
     use GatewayParameters;
+    use PreservedParameters;
 
     /**
      *

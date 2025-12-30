@@ -86,6 +86,9 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
             $data['riskData']['clientData'] = $this->getRiskData()['clientData'];
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 

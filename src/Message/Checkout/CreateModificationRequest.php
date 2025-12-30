@@ -49,6 +49,9 @@ class CreateModificationRequest extends AbstractCheckoutRequest
             'modificationAction' => $this->getModificationAction(),
         ];
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
     public function setModificationAction($modificationAction)

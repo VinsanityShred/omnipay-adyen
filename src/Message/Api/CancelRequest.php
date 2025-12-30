@@ -38,6 +38,9 @@ class CancelRequest extends AbstractApiRequest
             $data['reference'] = $transactionId;
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 
