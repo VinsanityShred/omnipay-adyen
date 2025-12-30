@@ -207,5 +207,60 @@ class PreservedParametersTest extends TestCase
 
         $this->assertEquals([], $data);
     }
+
+    public function test_initialize_preserves_parameters_without_setters()
+    {
+        // This simulates what happens when Omnipay's createRequest() calls initialize()
+        // Parameters without explicit setters would normally be discarded by Helper::initialize()
+        // Our override of initialize() should capture them.
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpRequest = $this->createMock(HttpRequest::class);
+        $request = new TestableRequest($httpClient, $httpRequest);
+
+        // Initialize with preserved_parameter_keys and a custom parameter
+        $request->initialize([
+            'merchantAccount' => 'TestMerchant',
+            'preserved_parameter_keys' => ['enableRecurring', 'customField'],
+            'enableRecurring' => true,
+            'customField' => 'customValue',
+        ]);
+
+        // The preserved parameters should be available
+        $this->assertEquals(['enableRecurring', 'customField'], $request->getPreservedParameterKeys());
+        $this->assertTrue($request->getParameter('enableRecurring'));
+        $this->assertEquals('customValue', $request->getParameter('customField'));
+
+        // And they should be merged into getData()
+        $data = $request->getData();
+        $this->assertTrue($data['enableRecurring']);
+        $this->assertEquals('customValue', $data['customField']);
+    }
+
+    public function test_initialize_preserves_only_specified_keys()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpRequest = $this->createMock(HttpRequest::class);
+        $request = new TestableRequest($httpClient, $httpRequest);
+
+        // Initialize with preserved_parameter_keys but also include a non-preserved parameter
+        $request->initialize([
+            'merchantAccount' => 'TestMerchant',
+            'preserved_parameter_keys' => ['enableRecurring'],
+            'enableRecurring' => true,
+            'notPreserved' => 'should be discarded',
+        ]);
+
+        // enableRecurring should be preserved
+        $this->assertTrue($request->getParameter('enableRecurring'));
+
+        // notPreserved should NOT be preserved (no setter, not in preserved list)
+        $this->assertNull($request->getParameter('notPreserved'));
+
+        // Only enableRecurring should appear in getData()
+        $data = $request->getData();
+        $this->assertTrue($data['enableRecurring']);
+        $this->assertArrayNotHasKey('notPreserved', $data);
+    }
 }
 
