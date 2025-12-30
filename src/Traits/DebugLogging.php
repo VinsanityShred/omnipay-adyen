@@ -35,7 +35,7 @@ trait DebugLogging
      */
     public function getDebugMode(): bool
     {
-        return (bool) $this->getParameter('debugMode');
+        return (bool) $this->getParameter('debug_mode');
     }
 
     /**
@@ -46,7 +46,7 @@ trait DebugLogging
      */
     public function setDebugMode(bool $enabled)
     {
-        return $this->setParameter('debugMode', $enabled);
+        return $this->setParameter('debug_mode', $enabled);
     }
 
     /**
@@ -56,7 +56,7 @@ trait DebugLogging
      */
     public function getDebugLogger(): ?callable
     {
-        return $this->getParameter('debugLogger');
+        return $this->getParameter('debug_logger');
     }
 
     /**
@@ -71,7 +71,7 @@ trait DebugLogging
      */
     public function setDebugLogger(?callable $logger)
     {
-        return $this->setParameter('debugLogger', $logger);
+        return $this->setParameter('debug_logger', $logger);
     }
 
     /**

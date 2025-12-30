@@ -28,7 +28,7 @@ trait PreservedParameters
      */
     public function getPreservedParameterKeys(): array
     {
-        return $this->getParameter('preservedParameterKeys') ?? [];
+        return $this->getParameter('preserved_parameter_keys') ?? [];
     }
 
     /**
@@ -39,7 +39,7 @@ trait PreservedParameters
      */
     public function setPreservedParameterKeys(array $keys)
     {
-        return $this->setParameter('preservedParameterKeys', $keys);
+        return $this->setParameter('preserved_parameter_keys', $keys);
     }
 
     /**
