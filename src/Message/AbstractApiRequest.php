@@ -20,21 +20,30 @@ abstract class AbstractApiRequest extends AbstractRequest
     public function sendData($data)
     {
         $auth = $this->getUsername() . ':' . $this->getPassword();
+        $endpoint = $this->getEndpoint();
+        $headers = [
+            'Content-Type' => 'application/json',
+            // Basic auth header.
+            'Authorization' => 'Basic ' . base64_encode($auth)
+        ];
+        $body = json_encode($data);
 
-        $response = $this->httpClient->request(
-            'POST',
-            $this->getEndpoint(),
-            [
-                'Content-Type' => 'application/json',
-                // Basic auth header.
-                'Authorization' => 'Basic ' . base64_encode($auth)
-            ],
-            json_encode($data)
-        );
+        // Log the outgoing request
+        $this->logRequest('POST', $endpoint, $headers, $body);
 
-        $payload = $this->getJsonData($response);
+        try {
+            $response = $this->httpClient->request('POST', $endpoint, $headers, $body);
+            $payload = $this->getJsonData($response);
 
-        return $this->createResponse($payload);
+            // Log the response
+            $this->logResponse($endpoint, $response, $payload);
+
+            return $this->createResponse($payload);
+        } catch (\Throwable $e) {
+            // Log any errors
+            $this->logError($endpoint, $e);
+            throw $e;
+        }
     }
 
     /**

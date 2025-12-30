@@ -5,12 +5,14 @@ namespace Omnipay\Adyen\Message;
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 use Omnipay\Adyen\Traits\GatewayParameters;
 use Omnipay\Adyen\Traits\PreservedParameters;
+use Omnipay\Adyen\Traits\DebugLogging;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
 {
     use GatewayParameters;
     use PreservedParameters;
+    use DebugLogging;
 
     /**
      * Constants for URL construction.

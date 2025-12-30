@@ -15,20 +15,29 @@ abstract class AbstractCheckoutRequest extends AbstractApiRequest
     public function sendData($data)
     {
         [$endpoint, $data] = $this->buildEndpointCleanData($data);
-        $response = $this->httpClient->request(
-            'POST',
-            $endpoint,
-            [
-                'Content-Type' => 'application/json',
-                // API Key header.
-                'x-api-key' => $this->getApiKey(),
-            ],
-            json_encode($data)
-        );
+        $headers = [
+            'Content-Type' => 'application/json',
+            // API Key header.
+            'x-api-key' => $this->getApiKey(),
+        ];
+        $body = json_encode($data);
 
-        $payload = $this->getJsonData($response);
+        // Log the outgoing request
+        $this->logRequest('POST', $endpoint, $headers, $body);
 
-        return $this->createResponse($payload);
+        try {
+            $response = $this->httpClient->request('POST', $endpoint, $headers, $body);
+            $payload = $this->getJsonData($response);
+
+            // Log the response
+            $this->logResponse($endpoint, $response, $payload);
+
+            return $this->createResponse($payload);
+        } catch (\Throwable $e) {
+            // Log any errors
+            $this->logError($endpoint, $e);
+            throw $e;
+        }
     }
 
     private function buildEndpointCleanData(array $parameters)
