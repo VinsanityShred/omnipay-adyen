@@ -31,7 +31,7 @@ class AbstractRequestTest extends TestCase
         $url = $this->request->getCheckoutUrl('payments');
         
         $this->assertEquals(
-            'https://checkout-test.adyen.com/v69/payments',
+            'https://checkout-test.adyen.com/' . AbstractRequest::VERSION_CHECKOUT . '/payments',
             $url
         );
     }
@@ -44,7 +44,7 @@ class AbstractRequestTest extends TestCase
         $url = $this->request->getCheckoutUrl('payments');
         
         $this->assertEquals(
-            'https://checkout-live.adyenpayments.com/checkout/v69/payments',
+            'https://checkout-live.adyenpayments.com/checkout/' . AbstractRequest::VERSION_CHECKOUT . '/payments',
             $url
         );
 
@@ -55,7 +55,7 @@ class AbstractRequestTest extends TestCase
         $url = $this->request->getCheckoutUrl('payments');
         
         $this->assertEquals(
-            'https://xxx-xxx-checkout-custom.adyenpayments.com/checkout/v69/payments',
+            'https://xxx-xxx-checkout-custom.adyenpayments.com/checkout/' . AbstractRequest::VERSION_CHECKOUT . '/payments',
             $url
         );
     }
