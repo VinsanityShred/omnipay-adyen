@@ -32,7 +32,7 @@ class CreateSessionRequest extends AbstractCheckoutRequest
 
         $data = [
             'amount' => [
-                'value' => 0,
+                'value' => $this->getAmountInteger() ?? 0,
                 'currency' => $this->getCurrency(),
             ],
             'merchantAccount' => $this->getMerchantAccount(),
