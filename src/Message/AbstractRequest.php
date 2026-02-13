@@ -54,9 +54,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const DEFAULT_PREFIX_LIVE = '';
 
     const VERSION_DIRECTORY         = 'v2';
-    const VERSION_CHECKOUT          = 'v69';
+    const VERSION_CHECKOUT          = 'v71';
     const VERSION_CHECKOUT_UTILITY  = 'v1';
-    const VERSION_PAYMENT_PAYMENT   = 'v69';
+    const VERSION_PAYMENT_PAYMENT   = 'v71';
     const VERSION_PAYMENT_RECURRING = 'v25';
     const VERSION_PAYMENT_PAYOUT    = 'v30';
 
