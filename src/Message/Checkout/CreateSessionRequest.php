@@ -32,7 +32,7 @@ class CreateSessionRequest extends AbstractCheckoutRequest
 
         $data = [
             'amount' => [
-                'value' => 0,
+                'value' => $this->getAmountInteger() ?? 0,
                 'currency' => $this->getCurrency(),
             ],
             'merchantAccount' => $this->getMerchantAccount(),
@@ -41,9 +41,7 @@ class CreateSessionRequest extends AbstractCheckoutRequest
             'countryCode' => $this->getCountryCode(),
         ];
 
-        if (!empty($this->getStorePaymentMethod())) {
-            $data['storePaymentMethod'] = $this->getStorePaymentMethod();
-        }
+        $data = $this->applyStorageParameters($data);
 
         if (!empty($this->getShopperInteraction())) {
             $data['shopperInteraction'] = $this->getShopperInteraction();
@@ -57,6 +55,9 @@ class CreateSessionRequest extends AbstractCheckoutRequest
             $data['shopperReference'] = $this->getShopperReference();
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 
@@ -67,5 +68,30 @@ class CreateSessionRequest extends AbstractCheckoutRequest
     public function getStorePaymentMethod()
     {
         return $this->getParameter('storePaymentMethod');
+    }
+
+    public function setStorePaymentMethodMode($storePaymentMethodMode)
+    {
+        $this->setParameter('storePaymentMethodMode', $storePaymentMethodMode);
+    }
+    public function getStorePaymentMethodMode()
+    {
+        return $this->getParameter('storePaymentMethodMode');
+    }
+
+    private function applyStorageParameters(array $data): array
+    {
+        // If the new mode is set, use it and ignore the old boolean
+        if ($mode = $this->getStorePaymentMethodMode()) {
+            $data['storePaymentMethodMode'] = $mode;
+            return $data;
+        }
+
+        // Fallback to the legacy boolean for older versions
+        if ($store = $this->getStorePaymentMethod()) {
+            $data['storePaymentMethod'] = $store;
+        }
+
+        return $data;
     }
 }

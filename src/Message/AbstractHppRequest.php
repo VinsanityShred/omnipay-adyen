@@ -22,18 +22,28 @@ abstract class AbstractHppRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $response = $this->httpClient->request(
-            'POST',
-            $this->getEndpoint(),
-            [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            http_build_query($data)
-        );
+        $endpoint = $this->getEndpoint();
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+        $body = http_build_query($data);
 
-        $payload = $this->getJsonData($response);
+        // Log the outgoing request
+        $this->logRequest('POST', $endpoint, $headers, $data);
 
-        return $this->createResponse($payload);
+        try {
+            $response = $this->httpClient->request('POST', $endpoint, $headers, $body);
+            $payload = $this->getJsonData($response);
+
+            // Log the response
+            $this->logResponse($endpoint, $response, $payload);
+
+            return $this->createResponse($payload);
+        } catch (\Throwable $e) {
+            // Log any errors
+            $this->logError($endpoint, $e);
+            throw $e;
+        }
     }
 
     /**

@@ -48,6 +48,9 @@ class PaymentMethodRequest extends AbstractCheckoutRequest
             $data['shopperReference'] = $this->getShopperReference();
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 }

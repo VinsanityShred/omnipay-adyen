@@ -100,6 +100,10 @@ class AuthorizeRequest extends AbstractHppRequest
             }
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        // (must be done before signature generation)
+        $data = $this->mergePreservedParameters($data);
+
         // Finally add the HMAC signature for the data.
 
         $signingString = $this->getSigningString($data);

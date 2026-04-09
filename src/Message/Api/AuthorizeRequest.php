@@ -75,6 +75,9 @@ class AuthorizeRequest extends AbstractApiRequest
 
         $data = $this->addPaymentMethodData($data);
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 

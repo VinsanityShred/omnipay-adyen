@@ -36,6 +36,9 @@ class CompleteAuthorizeRequest extends AbstractCheckoutRequest
 
         //$data = $this->addDetailsData($data);
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        $data = $this->mergePreservedParameters($data);
+
         return $data;
     }
 

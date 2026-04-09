@@ -4,11 +4,44 @@ namespace Omnipay\Adyen\Message;
 
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 use Omnipay\Adyen\Traits\GatewayParameters;
+use Omnipay\Adyen\Traits\PreservedParameters;
+use Omnipay\Adyen\Traits\DebugLogging;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
 {
     use GatewayParameters;
+    use PreservedParameters;
+    use DebugLogging;
+
+    /**
+     * Initialize the request with parameters.
+     *
+     * This override ensures that preserved parameters (which don't have explicit
+     * setter methods) are not discarded by Omnipay's Helper::initialize().
+     *
+     * @param array $parameters
+     * @return $this
+     */
+    public function initialize(array $parameters = [])
+    {
+        // Store original parameters before parent filters them
+        $originalParameters = $parameters;
+
+        // Let parent initialize (this sets preserved_parameter_keys among other things)
+        parent::initialize($parameters);
+
+        // Now manually set any parameters that are in the preserved list.
+        // These may have been filtered out by parent::initialize()
+        // because they don't have explicit setter methods.
+        foreach ($this->getPreservedParameterKeys() as $key) {
+            if (array_key_exists($key, $originalParameters)) {
+                $this->setParameter($key, $originalParameters[$key]);
+            }
+        }
+
+        return $this;
+    }
 
     /**
      * Constants for URL construction.
@@ -21,9 +54,9 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     const DEFAULT_PREFIX_LIVE = '';
 
     const VERSION_DIRECTORY         = 'v2';
-    const VERSION_CHECKOUT          = 'v69';
+    const VERSION_CHECKOUT          = 'v71';
     const VERSION_CHECKOUT_UTILITY  = 'v1';
-    const VERSION_PAYMENT_PAYMENT   = 'v69';
+    const VERSION_PAYMENT_PAYMENT   = 'v71';
     const VERSION_PAYMENT_RECURRING = 'v25';
     const VERSION_PAYMENT_PAYOUT    = 'v30';
 

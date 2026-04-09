@@ -46,6 +46,10 @@ class FetchPaymentMethodsRequest extends AbstractHppRequest
             $data['blockedMethods'] = $this->getBlockedMethods();
         }
 
+        // Merge in any preserved parameters that have been explicitly allowed
+        // (must be done before signature generation)
+        $data = $this->mergePreservedParameters($data);
+
         // Finally add the HMAC signature for the data.
 
         $signingString = $this->getSigningString($data);
