@@ -81,6 +81,10 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             $data['captureDelayHours'] = (int) $this->getCaptureDelayHours();
         }
 
+        if ($this->getTestMode() && !empty($this->getRequestedTestAcquirerResponseCode())) {
+            $data['additionalData']['RequestedTestAcquirerResponseCode'] = $this->getRequestedTestAcquirerResponseCode();
+        }
+
         $data = $this->addPaymentMethodData($data);
 
         if (isset($data['paymentMethod']['storedPaymentMethodId'])) {
@@ -113,11 +117,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
      * Get the payment data for the additionalData array.
      * In this case it is the CC details posted to the merchant site.
      * Be aware of PCI regulations when doing this.
-     *
-     * @return array
-     * @throws InvalidRequestException
      */
-    public function getPaymentMethodData()
+    public function getPaymentMethodData(): array
     {
         if (count($this->getPaymentMethod()) > 0) {
             return ['paymentMethod' => $this->getPaymentMethod()];
@@ -129,10 +130,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
     /**
      * If a credit card is supplied, then return the credit card
      * data, otherwise an empty array.
-     *
-     * @return array
      */
-    public function getCardData()
+    public function getCardData(): array
     {
         $data = [];
 
@@ -159,7 +158,7 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         return $data;
     }
 
-    public function setCaptureDelayHours($captureDelayHours)
+    public function setCaptureDelayHours($captureDelayHours): void
     {
         $this->setParameter('captureDelayHours', $captureDelayHours);
     }
@@ -167,6 +166,13 @@ class AuthorizeRequest extends AbstractCheckoutRequest
     public function getCaptureDelayHours()
     {
         return $this->getParameter('captureDelayHours');
+    }
+
+    // This method is in use Adyen\Model\Checkout\AdditionalDataCommon
+    // We can look at importing model and using in this class?
+    public function getRequestedTestAcquirerResponseCode()
+    {
+        return $this->getParameter('requestedTestAcquirerResponseCode');
     }
 
 }
