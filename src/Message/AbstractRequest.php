@@ -339,4 +339,21 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
             true
         ));
     }
+
+    /**
+     * Compares the current AbstractRequest version with a deprecated version value.
+     *
+     * @param $versionString
+     * @param $deprecatedVersion
+     * @return bool
+     */
+    public function isDeprecated($versionString, $deprecatedVersion): bool
+    {
+        // Parse the number from the version string
+        $versionNumber = (int) substr($versionString, 1); // Skip the first character 'v'
+
+        // Return the comparison result
+        return $versionNumber <= $deprecatedVersion;
+    }
+
 }

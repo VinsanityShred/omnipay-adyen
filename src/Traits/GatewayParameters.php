@@ -137,6 +137,7 @@ trait GatewayParameters
     }
 
     /**
+     * @deprecated executeThreeD deprecated with version 69
      * @return string|null Any value that will be cast to bool in use.
      */
     public function get3DSecure()
