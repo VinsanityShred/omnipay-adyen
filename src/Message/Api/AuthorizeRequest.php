@@ -69,12 +69,16 @@ class AuthorizeRequest extends AbstractApiRequest
         ];
 
         $data = [
-            'additionalData' => $additionalData,
             'amount' => $amount,
             'reference' => (string)$this->getTransactionId(),
             'merchantAccount' => $this->getMerchantAccount(),
         ];
 
+        // Include additionalData only if it's not an empty array
+        if (!empty($additionalData)) {
+            $data['additionalData'] = $additionalData;
+        }
+        
         $data = $this->addPaymentMethodData($data);
 
         // Merge in any preserved parameters that have been explicitly allowed
