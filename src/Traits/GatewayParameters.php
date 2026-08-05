@@ -137,7 +137,12 @@ trait GatewayParameters
     }
 
     /**
-     * @deprecated executeThreeD deprecated with version 69
+     * Whether to request 3D Secure via additionalData.executeThreeD.
+     *
+     * Only emitted for PAL Payment and Checkout API versions v69 and below.
+     * From v70 onward, Adyen removed executeThreeD; use Checkout 3DS2 request
+     * fields (returnUrl, browserInfo, channel, origin, paymentMethod) instead.
+     *
      * @return string|null Any value that will be cast to bool in use.
      */
     public function get3DSecure()

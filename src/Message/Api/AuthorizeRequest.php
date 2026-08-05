@@ -59,7 +59,7 @@ class AuthorizeRequest extends AbstractApiRequest
             $additionalData['billingAddress'] = $billingAddress;
         }
 
-        if ($this->isDeprecated(AbstractRequest::VERSION_CHECKOUT, 69)) {
+        if ($this->isVersionAtOrBelow(AbstractRequest::VERSION_PAYMENT_PAYMENT, 69)) {
             $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
         }
 

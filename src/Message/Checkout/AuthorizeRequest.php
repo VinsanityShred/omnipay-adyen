@@ -57,7 +57,7 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         }
 
 
-        if ($this->isDeprecated(AbstractRequest::VERSION_CHECKOUT, 69)) {
+        if ($this->isVersionAtOrBelow(AbstractRequest::VERSION_CHECKOUT, 69)) {
             $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
         }
 

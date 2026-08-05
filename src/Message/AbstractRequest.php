@@ -341,19 +341,24 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
     }
 
     /**
-     * Compares the current AbstractRequest version with a deprecated version value.
+     * Whether an Adyen API version string is at or below a numeric threshold.
      *
-     * @param $versionString
-     * @param $deprecatedVersion
+     * Used to gate request fields that were removed in later API versions.
+     * Returns true when the parsed version is less than or equal to $thresholdVersion
+     * (the field should still be emitted). Returns false when the version is above
+     * the threshold or the version string cannot be parsed.
+     *
+     * @param string $versionString Adyen version constant (e.g. "v69", "v71")
+     * @param int $thresholdVersion Numeric threshold to compare against
      * @return bool
      */
-    public function isDeprecated($versionString, $deprecatedVersion): bool
+    public function isVersionAtOrBelow($versionString, $thresholdVersion): bool
     {
-        // Parse the number from the version string
-        $versionNumber = (int) substr($versionString, 1); // Skip the first character 'v'
+        if (! preg_match('/^v(\d+)/', $versionString, $matches)) {
+            return false;
+        }
 
-        // Return the comparison result
-        return $versionNumber <= $deprecatedVersion;
+        return (int) $matches[1] <= $thresholdVersion;
     }
 
 }
