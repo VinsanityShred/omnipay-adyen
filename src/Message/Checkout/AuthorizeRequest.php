@@ -56,7 +56,10 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             $additionalData['billingAddress'] = $billingAddress;
         }
 
-        $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
+
+        if ($this->isVersionAtOrBelow(AbstractRequest::VERSION_CHECKOUT, 69)) {
+            $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
+        }
 
         $amount = [
             'value' => $this->getAmountInteger(),
@@ -91,6 +94,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             $data['recurringProcessingModel'] = $this->getRecurringProcessingModel() ?? 'CardOnFile';
             $data['shopperInteraction'] = $this->getShopperInteraction() ?? 'ContAuth';
         }
+
+        $data['additionalData'] = $this->formatAdditionalDataForPayload($data['additionalData']);
 
         return $data;
     }

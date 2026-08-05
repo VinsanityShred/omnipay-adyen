@@ -339,4 +339,40 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
             true
         ));
     }
+
+    /**
+     * Whether an Adyen API version string is at or below a numeric threshold.
+     *
+     * Used to gate request fields that were removed in later API versions.
+     * Returns true when the parsed version is less than or equal to $thresholdVersion
+     * (the field should still be emitted). Returns false when the version is above
+     * the threshold or the version string cannot be parsed.
+     *
+     * @param string $versionString Adyen version constant (e.g. "v69", "v71")
+     * @param int $thresholdVersion Numeric threshold to compare against
+     * @return bool
+     */
+    public function isVersionAtOrBelow($versionString, $thresholdVersion): bool
+    {
+        if (! preg_match('/^v(\d+)/', $versionString, $matches)) {
+            return false;
+        }
+
+        return (int) $matches[1] <= $thresholdVersion;
+    }
+
+    /**
+     * Format additionalData for JSON payload encoding.
+     *
+     * Adyen expects additionalData to be a JSON object (Structure). An empty
+     * PHP array encodes as [] and triggers validation error 702.
+     *
+     * @param array $additionalData
+     * @return array|\stdClass
+     */
+    protected function formatAdditionalDataForPayload(array $additionalData)
+    {
+        return empty($additionalData) ? (object) [] : $additionalData;
+    }
+
 }

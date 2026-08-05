@@ -70,6 +70,30 @@ Deprecated by adyen but still implemented:
 - Hosted Payment Pages (HPP)
 - Client Side Encryption (CSE)
 
+### 3D Secure (`3DSecure` parameter)
+
+**Breaking change (API v70+):** The gateway `3DSecure` parameter (and `set3DSecure()`) previously
+mapped to `additionalData.executeThreeD` on authorize requests. Adyen removed `executeThreeD`
+from Checkout and PAL Payment API **v70 and later**. This driver targets **v71**, so
+`3DSecure` **no longer affects authorize payloads** — the field is omitted automatically.
+
+| API version | `3DSecure` behaviour |
+|-------------|-------------------|
+| v69 and below | Sets `additionalData.executeThreeD` to `"true"` or `"false"` |
+| v70 and above (current) | Ignored; use Checkout 3DS2 request fields instead |
+
+For 3DS2 flows on Checkout API v70+, pass the fields Adyen expects on the `/payments` request:
+
+- `returnUrl` — where the shopper returns after authentication
+- `origin` — your site origin (required for some flows)
+- `browserInfo` — shopper browser data (via preserved parameters or request fields)
+- `channel` — e.g. `"Web"`
+- `paymentMethod` — encrypted card or token from Drop-in/Components (includes 3DS2 data)
+
+See Adyen's [Checkout 3D Secure documentation](https://docs.adyen.com/online-payments/3d-secure/)
+and [API Explorer](https://docs.adyen.com/api-explorer/Checkout/latest/post/payments) for required
+fields. Handle redirect/challenge responses via `isRedirect()` and `completeAuthorize()` as before.
+
 ## Hosted Payment Pages (HPP)
 
 !!! deprecated !!!
@@ -485,8 +509,8 @@ $request = $gateway->authorize([
     // POST data.
     'cardToken' => $_POST['encryptedData'],
 
-    // If you want to use 3D Secure, then set the 3D Secure flag
-    // and the URL to return the user to.
+    // 3DSecure only sets additionalData.executeThreeD on API versions v69 and below.
+    // On v70+ (current), use returnUrl and Checkout 3DS2 fields instead — see "3D Secure" above.
     '3DSecure' => true,
     'returnUrl' => 'https://example.com/complete-3d-secure-handler',
 ]);
@@ -620,7 +644,7 @@ $response = $request->send();
 ```
 
 ### Authorize a Payment
-Authorize is Omnipay default behavior. Please take a look at the [documentation](https://docs.adyen.com/api-explorer/#/CheckoutService/v64/overview) for required fields for 3DS.
+Authorize is Omnipay default behavior. Please take a look at the [documentation](https://docs.adyen.com/api-explorer/Checkout/latest/post/payments) for required fields for 3DS2.
 
 ```php
 $request = $gateway->authorize([
@@ -628,8 +652,8 @@ $request = $gateway->authorize([
     'amount' => 11.99,
     'currency' => 'EUR',
     'transactionId' => 'YOUR_TRANSACTION_ID',
-    'returnUrl' => 'https://merchant-site.example.com/payment-handler', // This is used for payment options which needs a redirect like giropay, 3DS
-    '3DSecure' => false // If true, you need to specifiy much more. Please refer to Adyen documentation.
+    'returnUrl' => 'https://merchant-site.example.com/payment-handler', // Required for redirect flows (giropay, 3DS2)
+    // 3DSecure is ignored on API v70+; configure 3DS2 via returnUrl, origin, browserInfo, channel, etc.
 ]);
 
 $response = $request->send();

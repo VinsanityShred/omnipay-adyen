@@ -59,7 +59,9 @@ class AuthorizeRequest extends AbstractApiRequest
             $additionalData['billingAddress'] = $billingAddress;
         }
 
-        $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
+        if ($this->isVersionAtOrBelow(AbstractRequest::VERSION_PAYMENT_PAYMENT, 69)) {
+            $additionalData['executeThreeD'] = ((bool)$this->get3DSecure() ? 'true' : 'false');
+        }
 
         $amount = [
             'value' => $this->getAmountInteger(),
@@ -77,6 +79,8 @@ class AuthorizeRequest extends AbstractApiRequest
 
         // Merge in any preserved parameters that have been explicitly allowed
         $data = $this->mergePreservedParameters($data);
+
+        $data['additionalData'] = $this->formatAdditionalDataForPayload($data['additionalData']);
 
         return $data;
     }

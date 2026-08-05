@@ -95,4 +95,26 @@ class AbstractRequestTest extends TestCase
             $url
         );
     }
+
+    /**
+     * @dataProvider versionAtOrBelowProvider
+     */
+    public function testIsVersionAtOrBelow($versionString, $threshold, $expected)
+    {
+        $this->assertSame($expected, $this->request->isVersionAtOrBelow($versionString, $threshold));
+    }
+
+    public function versionAtOrBelowProvider()
+    {
+        return [
+            'v69 at threshold 69' => ['v69', 69, true],
+            'v68 below threshold 69' => ['v68', 69, true],
+            'v71 above threshold 69' => ['v71', 69, false],
+            'v70 above threshold 69' => ['v70', 69, false],
+            'current checkout version above threshold' => [AbstractRequest::VERSION_CHECKOUT, 69, false],
+            'current payment version above threshold' => [AbstractRequest::VERSION_PAYMENT_PAYMENT, 69, false],
+            'malformed version without prefix' => ['71', 69, false],
+            'empty version string' => ['', 69, false],
+        ];
+    }
 } 
