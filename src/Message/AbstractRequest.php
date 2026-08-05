@@ -361,4 +361,18 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
         return (int) $matches[1] <= $thresholdVersion;
     }
 
+    /**
+     * Format additionalData for JSON payload encoding.
+     *
+     * Adyen expects additionalData to be a JSON object (Structure). An empty
+     * PHP array encodes as [] and triggers validation error 702.
+     *
+     * @param array $additionalData
+     * @return array|\stdClass
+     */
+    protected function formatAdditionalDataForPayload(array $additionalData)
+    {
+        return empty($additionalData) ? (object) [] : $additionalData;
+    }
+
 }

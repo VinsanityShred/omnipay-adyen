@@ -43,11 +43,12 @@ class AuthorizeRequestTest extends TestCase
         );
 
         if (isset($data['additionalData'])) {
-            $this->assertArrayNotHasKey('executeThreeD', $data['additionalData']);
+            $additionalData = json_decode(json_encode($data['additionalData']), true);
+            $this->assertArrayNotHasKey('executeThreeD', $additionalData);
         }
     }
 
-    public function testGetDataOmitsAdditionalDataWhenOnlyThreeDSecureWouldPopulateIt()
+    public function testGetDataSerializesEmptyAdditionalDataAsJsonObject()
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $httpRequest = $this->createMock(HttpRequest::class);
@@ -66,7 +67,8 @@ class AuthorizeRequestTest extends TestCase
 
         $data = $request->getData();
 
-        $this->assertArrayNotHasKey('additionalData', $data);
+        $this->assertArrayHasKey('additionalData', $data);
+        $this->assertSame('{}', json_encode($data['additionalData']));
     }
 
     public function testGetDataIncludesBillingAddressWithoutExecuteThreeD()
@@ -86,8 +88,9 @@ class AuthorizeRequestTest extends TestCase
         $data = $this->request->getData();
 
         $this->assertArrayHasKey('additionalData', $data);
-        $this->assertArrayHasKey('billingAddress', $data['additionalData']);
-        $this->assertArrayNotHasKey('executeThreeD', $data['additionalData']);
+        $additionalData = json_decode(json_encode($data['additionalData']), true);
+        $this->assertArrayHasKey('billingAddress', $additionalData);
+        $this->assertArrayNotHasKey('executeThreeD', $additionalData);
     }
 
     public function testExecuteThreeDWouldBeIncludedForCheckoutV69()

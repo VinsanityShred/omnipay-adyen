@@ -67,16 +67,12 @@ class AuthorizeRequest extends AbstractCheckoutRequest
         ];
 
         $data = [
+            'additionalData' => $additionalData,
             'amount' => $amount,
             'reference' => $this->getTransactionId(),
             'merchantAccount' => $this->getMerchantAccount(),
             'shopperInteraction' => 'Ecommerce',
         ];
-
-        // Include additionalData only if it's not an empty array
-        if (!empty($additionalData)) {
-            $data['additionalData'] = $additionalData;
-        }
 
         if (!empty($this->getOrigin())) {
             $data['origin'] = $this->getOrigin();
@@ -98,6 +94,8 @@ class AuthorizeRequest extends AbstractCheckoutRequest
             $data['recurringProcessingModel'] = $this->getRecurringProcessingModel() ?? 'CardOnFile';
             $data['shopperInteraction'] = $this->getShopperInteraction() ?? 'ContAuth';
         }
+
+        $data['additionalData'] = $this->formatAdditionalDataForPayload($data['additionalData']);
 
         return $data;
     }
